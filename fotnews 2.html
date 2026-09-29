@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fotnews | فوت‌نیوز</title>
+<style>
+:root{--green:#0d7a4b;--dark:#102a43;--light:#f5f7fa;--line:#e5e7eb;--gold:#f4b400}
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#fff;color:#172033}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+.top{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.nav{max-width:1200px;margin:auto;height:76px;display:flex;align-items:center;gap:24px;padding:0 18px}
+.logo{font-size:27px;font-weight:900;color:var(--green);white-space:nowrap}.logo span{color:var(--gold)}
+.navlinks{display:flex;gap:8px;flex:1}.navlinks button{border:0;background:transparent;padding:11px 14px;border-radius:12px;color:#344054}.navlinks button:hover,.navlinks .active{background:#edf8f2;color:var(--green);font-weight:700}
+.adminBtn{background:var(--dark);color:#fff;border:0;border-radius:12px;padding:11px 15px}
+.wrap{max-width:1200px;margin:26px auto;padding:0 18px}
+.hero{background:linear-gradient(120deg,#073b2a,#11935b);color:#fff;border-radius:24px;padding:35px;display:flex;justify-content:space-between;align-items:center;gap:20px;overflow:hidden}
+.hero h1{font-size:36px;margin:0 0 12px}.hero p{margin:0;color:#d9f7e7}.ball{font-size:90px;opacity:.9}
+.grid{display:grid;grid-template-columns:1fr 310px;gap:20px;margin-top:20px}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 6px 20px #102a4310}
+.sectionHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.sectionHead h2{margin:0;font-size:21px}.more{color:var(--green);background:none;border:0}
+.news{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.newsItem{border:1px solid var(--line);border-radius:16px;padding:15px}.tag{display:inline-block;background:#edf8f2;color:var(--green);border-radius:9px;padding:5px 8px;font-size:12px}.newsItem h3{font-size:16px;margin:10px 0 7px}.newsItem p{font-size:13px;color:#667085;margin:0;line-height:1.8}
+.side .match{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:13px 0}.match:last-child{border:0}.score{font-weight:900;color:var(--green)}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.day{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 5px;text-align:center}.day.head{border:0;background:var(--light);font-weight:700}.day.today{background:#eaf8f1;border-color:#a7dfc5;color:var(--green);font-weight:900}
+.empty{padding:50px;text-align:center;color:#98a2b3}
+#calendarView,#resultsView,#todayView,#adminView{display:none}
+.adminGrid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.form{display:grid;gap:10px}.form input,.form textarea,.form select{width:100%;padding:12px;border:1px solid #d0d5dd;border-radius:10px}.form textarea{min-height:110px}.primary{border:0;background:var(--green);color:#fff;padding:12px;border-radius:10px}.danger{border:0;background:#fee4e2;color:#b42318;padding:8px 12px;border-radius:9px}
+footer{margin-top:35px;background:#102a43;color:#dbe7f0;padding:30px;text-align:center}
+@media(max-width:800px){.nav{height:auto;min-height:68px;flex-wrap:wrap;padding:10px}.navlinks{order:3;overflow:auto;width:100%}.grid,.adminGrid{grid-template-columns:1fr}.hero h1{font-size:27px}.ball{font-size:60px}.news{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top"><nav class="nav">
+<div class="logo">Fot<span>news</span> ⚽</div>
+<div class="navlinks">
+<button class="active" onclick="show('home',this)">خانه</button>
+<button onclick="show('today',this)">اخبار امروز</button>
+<button onclick="show('today',this);setTodayTab('matches')">بازی‌های امروز</button>
+<button onclick="show('results',this)">نتایج بازی‌ها</button>
+<button onclick="show('calendar',this)">تقویم فوتبال</button>
+</div>
+<button class="adminBtn" onclick="show('admin')">⚙ پنل ادمین</button>
+</nav></header>
+
+<main class="wrap">
+<section id="home">
+<div class="hero"><div><h1>Fotnews؛ دنیای فوتبال اینجاست</h1><p>اخبار، بازی‌های امروز، نتایج و تقویم فوتبال در یکجا.</p></div><div class="ball">⚽</div></div>
+<div class="grid">
+<div>
+<div class="card" style="margin-top:20px"><div class="sectionHead"><h2>📰 آخرین اخبار</h2><button class="more" onclick="show('today')">مشاهده همه</button></div><div class="news" id="homeNews"></div></div>
+</div>
+<aside class="side">
+<div class="card"><div class="sectionHead"><h2>🔥 بازی‌های امروز</h2></div><div id="homeMatches"></div></div>
+<div class="card" style="margin-top:20px"><div class="sectionHead"><h2>📅 تقویم</h2></div><p style="color:#667085;font-size:13px">یک تاریخ را انتخاب کن تا اخبار، بازی‌ها و نتایج آن روز را ببینی.</p><button class="primary" onclick="show('calendar')">باز کردن تقویم</button></div>
+</aside>
+</div>
+</section>
+
+<section id="today" class="card">
+<div class="sectionHead"><h2>اخبار و بازی‌های امروز</h2><button class="more" onclick="show('home')">خانه</button></div>
+<div style="display:flex;gap:8px;margin-bottom:18px"><button class="primary" onclick="setTodayTab('news')">اخبار امروز</button><button class="adminBtn" onclick="setTodayTab('matches')">بازی‌های امروز</button></div>
+<div id="todayContent"></div>
+</section>
+
+<section id="results" class="card">
+<div class="sectionHead"><h2>🏆 نتایج بازی‌ها</h2></div>
+<div id="resultsList"></div>
+</section>
+
+<section id="calendar" class="card">
+<div class="sectionHead"><h2>📅 تقویم فوتبال</h2><div><button class="more" onclick="prevMonth()">‹</button><b id="monthTitle"></b><button class="more" onclick="nextMonth()">›</button></div></div>
+<p style="color:#667085">روی یک روز بزن؛ سپس سه بخش «اخبار امروز»، «بازی‌ها» و «نتایج» همان روز نمایش داده می‌شوند.</p>
+<div class="calendar" id="cal"></div>
+<div id="selectedDay" style="margin-top:18px"></div>
+</section>
+
+<section id="admin" class="card">
+<div class="sectionHead"><h2>⚙ پنل مدیریت Fotnews</h2><button class="more" onclick="show('home')">خروج</button></div>
+<p style="color:#667085">این نسخه برای دمو، اطلاعات را داخل مرورگر ذخیره می‌کند. برای سایت واقعی باید پنل به یک پایگاه‌داده و ورود امن متصل شود.</p>
+<div class="adminGrid">
+<div class="card"><h3>➕ افزودن خبر</h3><div class="form">
+<input id="newsTitle" placeholder="عنوان خبر">
+<textarea id="newsText" placeholder="متن کوتاه خبر"></textarea>
+<button class="primary" onclick="addNews()">انتشار خبر</button>
+</div></div>
+<div class="card"><h3>⚽ افزودن نتیجه</h3><div class="form">
+<input id="team1" placeholder="تیم اول">
+<input id="score1" placeholder="گل تیم اول" type="number">
+<input id="team2" placeholder="تیم دوم">
+<input id="score2" placeholder="گل تیم دوم" type="number">
+<button class="primary" onclick="addResult()">ثبت نتیجه</button>
+</div></div>
+</div>
+<div class="card" style="margin-top:20px"><h3>مدیریت اخبار</h3><div id="adminNews"></div></div>
+</section>
+</main>
+<footer>© 2026 Fotnews.com — سایت نتایج و اخبار فوتبال</footer>
+
+<script>
+let news=JSON.parse(localStorage.getItem('fotnews_news')||'null')||[
+ {title:'بازار نقل‌وانتقالات داغ‌تر می‌شود',text:'آخرین خبرهای فوتبال و حواشی مهم را در فوت‌نیوز دنبال کنید.'},
+ {title:'برنامه بازی‌های مهم امروز',text:'فهرست بازی‌ها و زمان شروع مسابقات را بررسی کنید.'},
+ {title:'نتایج مسابقات فوتبال',text:'نتایج ثبت‌شده مسابقات در این بخش نمایش داده می‌شود.'},
+ {title:'فوتبال ایران و جهان',text:'خبرهای جذاب و کوتاه فوتبالی در Fotnews.'}
+];
+let results=JSON.parse(localStorage.getItem('fotnews_results')||'null')||[
+ {a:'رئال مادرید',b:'بارسلونا',x:2,y:1},
+ {a:'آرسنال',b:'چلسی',x:1,y:1},
+ {a:'اینتر',b:'میلان',x:3,y:0}
+];
+let matches=[['منچسترسیتی','لیورپول','18:30'],['رئال مادرید','بارسلونا','21:00'],['بایرن مونیخ','دورتموند','23:00']];
+let viewMonth=new Date(); let selected=new Date();
+
+function save(){localStorage.setItem('fotnews_news',JSON.stringify(news));localStorage.setItem('fotnews_results',JSON.stringify(results))}
+function show(id,btn){['home','today','results','calendar','admin'].forEach(x=>document.getElementById(x).style.display=x===id?'block':'none');document.querySelectorAll('.navlinks button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderAll();if(id==='calendar')renderCal()}
+function setTodayTab(tab){document.getElementById('todayContent').innerHTML=tab==='news'?news.map(n=>`<div class="newsItem" style="margin-bottom:10px"><span class="tag">خبر</span><h3>${n.title}</h3><p>${n.text}</p></div>`).join(''):matches.map(m=>`<div class="match"><span>${m[0]}</span><b>${m[2]}</b><span>${m[1]}</span></div>`).join('')}
+function renderAll(){
+document.getElementById('homeNews').innerHTML=news.slice(0,4).map(n=>`<article class="newsItem"><span class="tag">خبر فوتبال</span><h3>${n.title}</h3><p>${n.text}</p></article>`).join('');
+document.getElementById('homeMatches').innerHTML=matches.map(m=>`<div class="match"><span>${m[0]}</span><span>${m[2]}</span><span>${m[1]}</span></div>`).join('');
+document.getElementById('resultsList').innerHTML=results.map(r=>`<div class="match"><span>${r.a}</span><span class="score">${r.x} - ${r.y}</span><span>${r.b}</span></div>`).join('');
+document.getElementById('adminNews').innerHTML=news.map((n,i)=>`<div class="match"><span>${n.title}</span><button class="danger" onclick="delNews(${i})">حذف</button></div>`).join('');
+setTodayTab('news')
+}
+function addNews(){let t=document.getElementById('newsTitle').value.trim(),d=document.getElementById('newsText').value.trim();if(!t)return alert('عنوان خبر را وارد کن');news.unshift({title:t,text:d||'خبر جدید فوت‌نیوز'});save();document.getElementById('newsTitle').value='';document.getElementById('newsText').value='';renderAll();alert('خبر منتشر شد ✅')}
+function addResult(){let a=team1.value.trim(),b=team2.value.trim(),x=score1.value,y=score2.value;if(!a||!b||x===''||y==='')return alert('همه فیلدها را کامل کن');results.unshift({a,b,x,y});save();team1.value=team2.value=score1.value=score2.value='';renderAll();alert('نتیجه ثبت شد ✅')}
+function delNews(i){news.splice(i,1);save();renderAll()}
+function renderCal(){
+let y=viewMonth.getFullYear(),m=viewMonth.getMonth();document.getElementById('monthTitle').textContent=new Intl.DateTimeFormat('fa-IR',{year:'numeric',month:'long'}).format(viewMonth);
+let first=new Date(y,m,1).getDay(); first=(first+1)%7;let days=new Date(y,m+1,0).getDate();let names=['ش','ی','د','س','چ','پ','ج'];let h=names.map(x=>`<div class="day head">${x}</div>`).join('');for(let i=0;i<first;i++)h+='<div></div>';for(let d=1;d<=days;d++){let dt=new Date(y,m,d),is=dt.toDateString()===new Date().toDateString();h+=`<button class="day ${is?'today':''}" onclick="pickDay(${d})">${d}</button>`}document.getElementById('cal').innerHTML=h;pickDay(selected.getMonth()===m?selected.getDate():1)}
+function pickDay(d){selected=new Date(viewMonth.getFullYear(),viewMonth.getMonth(),d);document.getElementById('selectedDay').innerHTML=`<div class="card"><h3>📅 ${new Intl.DateTimeFormat('fa-IR',{dateStyle:'full'}).format(selected)}</h3><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="primary" onclick="alert('اخبار این تاریخ در نسخه کامل از پایگاه‌داده خوانده می‌شود.')">اخبار امروز</button><button class="adminBtn" onclick="alert('بازی‌های این تاریخ در نسخه کامل نمایش داده می‌شوند.')">بازی‌های امروز</button><button class="adminBtn" onclick="alert('نتایج این تاریخ در نسخه کامل نمایش داده می‌شوند.')">نتایج بازی‌ها</button></div></div>`}
+function prevMonth(){viewMonth.setMonth(viewMonth.getMonth()-1);renderCal()}function nextMonth(){viewMonth.setMonth(viewMonth.getMonth()+1);renderCal()}
+renderAll();show('home');
+</script>
+</body></html>
